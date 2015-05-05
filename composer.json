@@ -1,6 +1,6 @@
 {
 	"require": {
-		"php": ">=5.2.4",
+		"php": ">=5.4.0",
 		"codeigniter/framework": "3.0.0",
 		"rain/raintpl": ">=3.0.0",
 		"zendframework/zend-http": ">=2.4.0",
