@@ -3,11 +3,12 @@
 		"php": ">=5.4.0",
 		"codeigniter/framework": "3.0.0",
 		"smarty/smarty": "3.1.21",
-		"zendframework/zend-http": ">=2.4.0",
 		"zendframework/zend-config": ">=2.4.0",
+		"zendframework/zend-http": ">=2.4.0",
 		"zendframework/zend-mail": ">=2.4.0",
 		"zf1/zend-search-lucene": "~1.12",
-		"hybridauth/hybridauth": ">=2.4.1"
+		"hybridauth/hybridauth": ">=2.4.1",
+		"google/recaptcha": "1.1.1"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"

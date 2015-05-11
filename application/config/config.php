@@ -4,6 +4,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
   |--------------------------------------------------------------------------
+  | reCaptcha
+  |--------------------------------------------------------------------------
+  |
+  | Cấu hình reCaptcha
+  |
+ */
+$config['recaptcha_site_key'] = '6LcZoQYTAAAAAJmrTGRob0-6Lfu3-hI39TsM4WYy';
+$config['recaptcha_secret_key'] = '6LcZoQYTAAAAAPki5Ueb9IlrbhRjM3Sljb_K1Wub';
+
+/*
+  |--------------------------------------------------------------------------
   | Base Site URL
   |--------------------------------------------------------------------------
   |

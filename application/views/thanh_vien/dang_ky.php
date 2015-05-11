@@ -75,8 +75,10 @@
                                 <fieldset>
                                     <legend>Đăng ký</legend>
                                     <?php
-                                    if (!empty($error)) {
-                                        foreach ($error as $value) {
+                                    if (!empty($error))
+                                    {
+                                        foreach ($error as $value)
+                                        {
                                             echo '<p class="bg-danger">' . $value . '</p>';
                                         }
                                     }
@@ -108,10 +110,9 @@
                                                 </div></td>
                                         </tr>
                                         <tr>
-                                            <td><p>Captcha</p>
-                                                <p><img src="{captcha_image_url}" width="150" height="30"  alt="Mã xác thực"/></p></td>
+                                            <td><p>Captcha</p></td>
                                             <td><div align="right">
-                                                    <input name="captcha" type="text" id="captcha" placeholder="Xác thực bạn không phải Robot" size="50">
+                                                    <?php echo $recaptcha_body; ?>
                                                 </div></td>
                                         </tr>
                                         <tr>
@@ -133,5 +134,6 @@
             <p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds.</p>
         </div>
 
+        <?php echo $recaptcha_script; ?>
     </body>
 </html>

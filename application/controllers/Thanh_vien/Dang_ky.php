@@ -9,8 +9,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
+ * 
+ * 
+ * @author Phạm Tiến Thành <tienthanh.dqc@gmail.com>
  * @property Usermodel $usermodel
- * @property Captcha_model $captcha_model
+ * @property recaptcha_model $recaptcha_model
  */
 class Dang_ky extends CI_Controller {
 
@@ -32,24 +35,28 @@ class Dang_ky extends CI_Controller {
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
 
+        $this->load->model('recaptcha_model');
+
         $this->form_validation->set_rules('user_name', 'Bí Danh', 'required');
         $this->form_validation->set_rules('user_password_new', 'Mật khẩu', 'required');
         $this->form_validation->set_rules('user_password_repeat', 'Xác nhận mật khẩu', 'required');
         $this->form_validation->set_rules('user_email', 'Email', 'required');
 
         // Nếu người dùng đã gửi form đăng ký lên hệ thống
-        if ($this->input->post('btn_submit')) {
+        if ($this->input->post('btn_submit'))
+        {
             /**
              * Bắt đầu quy trình kiểm tra đăng ký
              */
             // Bước 1: Kiểm tra Captcha, nếu không đúng yêu cầu nhập lại
-            $this->load->model('captcha_model');
-            if (!$this->captcha_model->check($this->input->post('captcha'))) {
-                $this->data['error'][] = lang('message_captcha_wrong');
+            if (!$this->recaptcha_model->check($this->input->post('captcha')))
+            {
+                $this->data['error'][] = 'Bạn chưa xác thực mình không phải là robot!';
             }
 
             // Bước 2: Kiểm tra tính hợp lệ của dữ liệu người dùng đã nhập
-            elseif ($this->form_validation->run() == TRUE) {
+            elseif ($this->form_validation->run() == TRUE)
+            {
                 // Lấy các thông tin cần thiết
                 $user_name = $this->input->post('user_name');
                 $user_email = $this->input->post('user_email');
@@ -58,25 +65,41 @@ class Dang_ky extends CI_Controller {
                 // Bước 3: Thực hiện yêu cầu tạo tài khoản
                 $status = $this->usermodel->new_user($user_name, $user_email, $user_password);
 
-                if ($status == Usermodel::USER_REGISTER_SUCCEED) {
+                if ($status == Usermodel::USER_REGISTER_SUCCEED)
+                {
                     $this->data['user_email'] = $user_email;
                     $this->parser->parse('thanh_vien/dang_ky_thanh_cong', $this->data);
                     return;
-                } elseif ($status == Usermodel::USER_EMAIL_FORMAT_ILLEGAL) {
+                }
+                elseif ($status == Usermodel::USER_EMAIL_FORMAT_ILLEGAL)
+                {
                     $this->data['error'][] = 'Email không được hệ thống thông qua!';
-                } elseif ($status == Usermodel::USER_CHECK_USERNAME_FAILED) {
+                }
+                elseif ($status == Usermodel::USER_CHECK_USERNAME_FAILED)
+                {
                     $this->data['error'][] = 'Bí danh không được hệ thống thông qua!';
-                } elseif ($status == Usermodel::USER_USERNAME_EXISTS) {
+                }
+                elseif ($status == Usermodel::USER_USERNAME_EXISTS)
+                {
                     $this->data['error'][] = 'Tên người dùng đã tồn tại!';
-                } elseif ($status == Usermodel::USER_EMAIL_EXISTS) {
+                }
+                elseif ($status == Usermodel::USER_EMAIL_EXISTS)
+                {
                     $this->data['error'][] = 'Địa chỉ Email đã có người dùng!';
+                }
+                elseif ($status == Usermodel::USER_REGISTER_FAILED)
+                {
+                    $this->data['error'][] = 'Đăng ký thất bại!!!';
+                }
+                else
+                {
+                    $this->data['error'][] = 'Có lỗi đã xảy ra!!! Mã lỗi ' . $status;
                 }
             }
         }
 
-        // Tạo mã xác thực đơn giản chể chống spam
-        $this->load->model('captcha_model');
-        $this->data['captcha_image_url'] = $this->captcha_model->create()['img_url'];
+        $this->data['recaptcha_script'] = $this->recaptcha_model->javascript_url();
+        $this->data['recaptcha_body'] = $this->recaptcha_model->create();
 
         $this->parser->parse('thanh_vien/dang_ky', $this->data);
     }
